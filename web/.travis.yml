@@ -1,0 +1,13 @@
+services:
+  - docker
+
+script:
+  - docker build ./web -t tramm/tailgate:$TRAVIS_BRANCH
+  - docker run -d -p 127.0.0.1:80:4567 tramm/tailgate:$TRAVIS_BRANCH
+  - docker ps -a
+   
+after_success:
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD && docker push tramm/tailgate:$TRAVIS_BRANCH
+ 
+notifications:
+  slack: saboogroupworkspace:tco87KFtlVfRyVKhQoaEfKQn#mobiledev-bas

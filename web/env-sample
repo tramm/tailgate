@@ -1,0 +1,31 @@
+
+# Used in server/app.js
+MONGO_URL="mongodb+srv://user:password@cluster0.mongodb.net/sample_dev?retryWrites=true"
+MONGO_URL_TEST="mongodb+srv://user:password@cluster0-q2wsq.mongodb.net/sample_dev?retryWrites=true"
+PORT=8000
+PROD_HOST_URL=http://api.json.com
+DEV_HOST_URL=http://dev.api.json.com
+#NODE_ENV=production
+#MODE=dev
+DASHBOARD_YEAR=2019
+# Static Content
+STATIC_WEB_HOST=https://s3.amazonaws.com/sample
+
+#SMS 
+SMS_TEXTLOCAL_API_KEY=sample
+
+
+# Odoo server details
+Odoo_host=localhost
+Odoo_port=8069
+Odoo_database=sample
+Odoo_user=sample
+Odoo_password=sample
+
+# Used in server/aws.js
+Amazon_accessKeyId="xxxxxx"
+Amazon_secretAccessKey="xxxxxx"
+Amazon_region="xxxxxx"
+
+# Used in server/models/User.js
+EMAIL_SUPPORT_FROM_ADDRESS="ram.tangirala@gmail.com"
