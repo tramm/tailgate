@@ -11,6 +11,8 @@ const jwtSecret = require('./jwtConfig');
 const jwt = require('jsonwebtoken');
 const sms = require('./ext/sms');
 const OTP = require('./ext/otp');
+const odoo = require('./odoo_server');
+const base = require('./models/base');
 
 const BCRYPT_SALT_ROUNDS = 12;
 require('dotenv').config();
@@ -19,77 +21,48 @@ const STATIC_HOST = process.env.STATIC_WEB_HOST;
 function auth_pass({ server }) {
 
   passport.use(
-    'register',
-    new LocalStrategy(
-      {
-        usernameField: 'mobile',
-        passwordField: 'pin',
-        passReqToCallback: true,
-        session: false,
-      },
-      (req, mobile, pin, done) => {
-        console.log(mobile);
-        console.log(req.body.email);
-        try {
-          User.findOne({
-            mobile: mobile
-          }).then((user) => {
-            if (user != null) {
-              console.log('mobile already taken');
-              return done(null, false, {
-                message: 'mobile already taken',
-              });
-            }
-            //check if pin and repin are same 
-            if (pin != req.body.repin) {
-              return done(null, false, {
-                message: 'pin and confirm pin do not match',
-              });
-            }
-            bcrypt.hash(pin, BCRYPT_SALT_ROUNDS).then((hashedPassword) => {
-              User.add({
-                mobile,
-                pin: hashedPassword,
-                email: req.body.email,
-              }).then((user) => {
-                console.log('user created');
-                return done(null, user);
-              });
-            });
-          });
-        } catch (err) {
-          return done(err);
-        }
-      },
-    ),
-  );
-  passport.use(
     'local',
     new LocalStrategy(
       {
         usernameField: 'mobile',
-        passwordField: 'pin',
+        passwordField: 'password',
+        session: false,
       },
-      (mobile, pin, done) => {
+      (mobile, password, done) => {
         try {
+          //console.log(req.body);
           console.log("Hello from passport login");
-          console.log("mobile and pin : " + mobile + pin);
+          console.log("mobile and password : " + mobile + password);
           User.findOne({
             mobile: mobile
           }).then((user) => {
             if (user === null) {
               return done(null, false, { message: 'bad username' });
             }
-            bcrypt.compare(pin, user.pin).then((response) => {
-              if (response !== true) {
-                console.log('pins do not match');
-                return done(null, false, { message: 'pins do not match' });
+            console.log("Trying to create Odoo Session");
+            oserver = odoo.getOdoo(user.email, password);
+            console.log(oserver);
+            if (oserver.sid) {
+              console.log("trying to logout");
+              oserver.logout();
+            }
+            oserver.connect(async function (err, result) {
+              if (err) {
+                return done(null, false, { message: 'cannot connect to DMS' });
               }
               console.log('user found & authenticated');
+              model = 'res.partner';
+              let im_result = await oserver.search_read(model, { domain: [["id", "=", user.partner_id]], fields: ["id", "image"] });
+              user.image = im_result.records[0].image;
+              role_result = await base.getUserRole(user);
+              console.log("User role result", role_result);
+              user.role = role_result.role;
+              user.teams = role_result.teams;
               return done(null, user);
             });
           });
         } catch (err) {
+          console.log("Error o: ", err);
           done(err);
         }
       },
@@ -109,7 +82,12 @@ function auth_pass({ server }) {
         const user = await User.findById(jwt_payload.id);
         if (user) {
           console.log('user found in db in passport');
-          done(null, user);
+          const server = odoo.getOdoo(user.email)
+          if (server.sid == null) {
+            done("User not Logged into Odoo");
+          } else {
+            done(null, user);
+          }
         } else {
           console.log('user not found in db');
           done(null, false);
@@ -119,30 +97,19 @@ function auth_pass({ server }) {
       }
     }),
   );
-  server.post('/register', (req, res, next) => {
-    console.log("Doing Registration");
-    passport.authenticate('register', (err, user, info) => {
-      console.log("HALOOOOO");
-      if (err) {
-        console.error(`error ${err}`);
-      }
-      if (info !== undefined) {
-        console.error(info.message);
-        if (info.message === 'bad username') {
-          res.status(401).send({ "error": info.message });
-        } else {
-          res.status(403).send({ "error": info.message });
-        }
-      } else {
-        const token = jwt.sign({ id: user.id }, jwtSecret.secret);
-        res.status(200).send({
-          auth: true,
-          token,
-          message: 'user registered & logged in',
-        });
-        console.log("Successful Login");
-      }
-    })(req, res, next);
+  server.get('/user/avatar/:id', async (req, res) => {
+    console.log(req);
+    try {
+      let server = odoo.getOdoo(req.user.name);
+      id = parseInt(req.params.id);
+      model = 'res.partner';
+      let result = await server.search_read(model, { domain: [["id", "=", id]], fields: ["id", "image"] });
+      console.log(model + '', result);
+      console.log(model + '...', result[0]);
+      res.json(result);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
   });
   passport.serializeUser(function (user, cb) {
     console.log("Serializing User", user)
@@ -156,27 +123,41 @@ function auth_pass({ server }) {
       cb(null, user);
     });
   });
-
   server.use(passport.initialize());
   server.use(passport.session());
+  server.get('/logincallback',
+    function (req, res) {
+      res.render('/');
+    });
   server.post('/login',
     passport.authenticate('local'),
     (req, res, next) => {
+      let user = req.user;
       const token = jwt.sign({ id: req.user.id }, jwtSecret.secret);
-      res.status(200).send({
-        auth: true,
-        token,
-        message: 'user found & logged in',
-      });
-      console.log("Successful Login");
+        if (user.image == false) {
+          console.log("No User Avatar Found !!!!");
+          user.image = "";
+        }
+        res.status(200).send({
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          auth: true,
+          role: user.role,
+          teams: user.teams,
+          token,
+          message: 'user found & logged in',
+        });
+        console.log("Successful Login");
     });
+ 
   server.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/login');
   });
+
   server.post('/otp_verify', async (req, res, next) => {
-    valid = await OTP.validate({ token: req.body.token, secret: req.body.secret })
-    console.log("speakeasy response - ", valid);
+    valid = OTP.validate({ token: req.body.token })
     if (!valid) {
       res.status(401).send({
         message: "Bad OTP try again"
@@ -193,20 +174,17 @@ function auth_pass({ server }) {
     console.log("Doing Verification");
     const user = await User.findOne({ mobile: req.body.mobile }).lean();
     if (user === null) {
-      let secret = await OTP.generate_secret();
-      let otp_val = await OTP.generate_otp(secret);
+      res.status(401).send({
+        message: "Bad Mobile provided"
+      });
+      otp_val = await OTP.verify();
       console.log(otp_val);
       otp_message = " Thanks for downloading Book a service app please use OTP " + otp_val.token;
       log_message = "Sent Message to " + req.body.mobile
+      sms('9840021822', log_message.replace(/ /g, "%20"));
       sms(req.body.mobile, otp_message.replace(/ /g, "%20"));
-      res.status(200).send({
-        auth: false,
-        error: "User Not in System",
-        key: secret
-      });
     } else {
       res.status(200).send({
-        auth: true,
         message: 'mobile present in DB',
       });
       console.log("Successful Login");
