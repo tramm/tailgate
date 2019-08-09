@@ -1,9 +1,232 @@
 {
-    "posts": [
-      { "id": 1, "title": "json-server", "author": "typicode" }
-    ],
-    "comments": [
-      { "id": 1, "body": "some comment", "postId": 1 }
-    ],
-    "profile": { "name": "typicode" }
-  }
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "id": 5,
+      "title": "json-client",
+      "author": "tailgate"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  
+  "manager": [
+    {
+      "id": "manager1",
+      "name": "Rahul",
+      "Mobile": "9998989898",
+      "password": "1234",
+      "locations": [
+        {
+          "locationName": "Jayanagar 4th block",
+          "latitude": 23.333222,
+          "longitude": 443.22332
+        },
+        {
+          "locationName": "Jayanagar 6th block",
+          "latitude": 2.333222,
+          "longitude": 243.554333
+        },
+        {
+          "locationName": "inidranagar",
+          "latitude": 32.26354,
+          "longitude": 109.22222
+        }
+      ],
+      "userid": [
+        "user1",
+        "user2",
+        "user3"
+      ]
+    },
+    {
+      "id": "manager2",
+      "name": "ram",
+      "Mobile": "8787778788",
+      "password": "1234",
+      "locations": [
+        {
+          "locationName": "Jayanagar 4th block",
+          "latitude": 23.333222,
+          "longitude": 443.22332
+        },
+        {
+          "locationName": "rajajinagar",
+          "latitude": 21.333222,
+          "longitude": 24.554333
+        }
+      ],
+      "userid": [
+        "user1",
+        "user4",
+        "user2"
+      ]
+    },
+    {
+      "id": "manager3",
+      "name": "suresh",
+      "Mobile": "7666565454",
+      "password": "1234",
+      "locations": [
+        {
+          "locationName": "Jayanagar 4th block",
+          "latitude": 23.333222,
+          "longitude": 443.22332
+        },
+        {
+          "locationName": "dasarahalli",
+          "latitude": 21.333222,
+          "longitude": 24.554333
+        }
+      ],
+      "userid": [
+        "user4",
+        "user5",
+        "user6"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "user1",
+      "name": "mohan",
+      "mobile": "7477377272",
+      "password": "1234"
+    },
+    {
+      "id": "user2",
+      "name": "prashant",
+      "mobile": "3422343234",
+      "password": "1234"
+    },
+    {
+      "id": "user3",
+      "name": "chalikeni",
+      "mobile": "2122222222",
+      "password": "1234"
+    },
+    {
+      "id": "user4",
+      "name": "divya",
+      "mobile": "9877654543",
+      "password": "1234"
+    }
+  ],
+  "orders": [
+    {
+      "id": "order1",
+      "name": "WH/OUT/00001",
+      "origin": "SO022",
+      "scheduled_date": "2019-07-09",
+      "booking_date": "2019-03-02"
+    },
+    {
+      "id": "order2",
+      "name": "WH/IN/00001",
+      "origin": "PO00001",
+      "scheduled_date": "2019-02-09",
+      "booking_date": "2019-01-02"
+    },
+    {
+      "id": "order3",
+      "name": "WH/IN/00004",
+      "origin": "SO032",
+      "scheduled_date": "2019-02-21",
+      "booking_date": "2019-03-12"
+    },
+    {
+      "id": "order4",
+      "name": "WH/IN/00005",
+      "origin": "SO072",
+      "scheduled_date": "2019-07-14",
+      "booking_date": "2019-01-21"
+    }
+  ],
+  "location": [
+    {
+      "id": "location1",
+      "latitude": 22.22222,
+      "longitude": 23.2222,
+      "name": "jayanagar"
+    },
+    {
+      "id": "location2",
+      "latitude": 34.22222,
+      "longitude": 65.2222,
+      "name": "indiranagar"
+    },
+    {
+      "id": "location3",
+      "latitude": 76.22222,
+      "longitude": 98.2222,
+      "name": "rajajinagar"
+    },
+    {
+      "id": "location4",
+      "latitude": "",
+      "longitude": "",
+      "name": "jayanagar 4th block"
+    }
+  ],
+  
+  "exceptions": [
+      "vehicle new entry", "No matching order present", "order not created", "emergency","emergency exit", "special exit"
+  ],
+
+  "event_type": ["Entry","Exit"],
+
+  "events":[
+    {
+      "id":"event1",
+      "type":"Entry",
+      "ScannedNumber":"122232",
+      "locationID": "location1",
+      "orderID": "order1",
+      "exception":" ",
+      "userID": "user1",
+      "image": "car1.png"
+    },
+    {
+      "id":"event2",
+      "type":"Entry",
+      "ScannedNumber":"13232",
+      "locationID": "location2",
+      "orderID": "order2",
+      "exception":" ",
+      "userID": "user2",
+      "image": "number.png"
+    },
+    {
+      "id":"event3",
+      "type":"exit",
+      "ScannedNumber":"1987",
+      "locationID": "location3",
+      "orderID": "order3",
+      "exception":" ",
+      "userID": "user3",
+      "image": "abc.png"
+    },
+    {
+      "id":"event1",
+      "type":"Entry",
+      "ScannedNumber":"1877",
+      "locationID": "location4",
+      "orderID": null,
+      "exception":"vehicle new entry",
+      "userID": "user4",
+      "image": "car1.png"
+    }
+  ]
+}
