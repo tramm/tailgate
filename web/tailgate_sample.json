@@ -1,27 +1,4 @@
 {
-  "posts": [
-    {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    },
-    {
-      "id": 5,
-      "title": "json-client",
-      "author": "tailgate"
-    }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  },
-  
   "manager": [
     {
       "id": "manager1",
@@ -157,76 +134,148 @@
   "location": [
     {
       "id": "location1",
-      "latitude": 22.22222,
-      "longitude": 23.2222,
-      "name": "jayanagar"
+      "lat&long": 22.22222,
+      "name": "jayanagar",
+      "userID": [
+        "user1",
+        "user2",
+        "user3"
+      ],
+      "managerID": [
+        "manager1"
+      ],
+      "type": "service center"
     },
     {
       "id": "location2",
-      "latitude": 34.22222,
-      "longitude": 65.2222,
-      "name": "indiranagar"
+      "lat&long": 34.22222,
+      "name": "indiranagar",
+      "userID": [
+        "user1"
+      ],
+      "managerID": [
+        "manager1",
+        "manager2"
+      ],
+      "type": "stock warehouse"
     },
     {
       "id": "location3",
-      "latitude": 76.22222,
-      "longitude": 98.2222,
-      "name": "rajajinagar"
+      "lat&long": 76.22222,
+      "name": "rajajinagar",
+      "userID": [
+        "user2",
+        "user3"
+      ],
+      "managerID": [
+        "manager3",
+        "manager4"
+      ],
+      "type": "showroom"
     },
     {
       "id": "location4",
-      "latitude": "",
-      "longitude": "",
-      "name": "jayanagar 4th block"
+      "lat&long": "",
+      "name": "jayanagar 4th block",
+      "userID": [
+        "user4"
+      ],
+      "managerID": [
+        "manager1"
+      ],
+      "type": "service center"
     }
   ],
   
+  "locationAdd":
+  {
+    "success":true,
+    "message":"successfully added location"
+  },
+  
   "exceptions": [
-      "vehicle new entry", "No matching order present", "order not created", "emergency","emergency exit", "special exit"
+    "vehicle new entry",
+    "No matching order present",
+    "order not created",
+    "emergency",
+    "emergency exit",
+    "special exit"
   ],
-
-  "event_type": ["Entry","Exit"],
-
-  "events":[
+  "event_type": [
+    "Entry",
+    "Exit"
+  ],
+  "events": [
     {
-      "id":"event1",
-      "type":"Entry",
-      "ScannedNumber":"122232",
+      "id": "event1",
+      "type": "Entry",
+      "ScannedNumber": "122232",
       "locationID": "location1",
       "orderID": "order1",
-      "exception":" ",
+      "exception": " ",
       "userID": "user1",
-      "image": "car1.png"
+      "image": "car1.png",
+      "lat&long": 34.22222,
+      "bookingDate": "2019-08-09",
+      "serviceDate": "2019-04-05"
     },
     {
-      "id":"event2",
-      "type":"Entry",
-      "ScannedNumber":"13232",
+      "id": "event2",
+      "type": "Entry",
+      "ScannedNumber": "13232",
       "locationID": "location2",
       "orderID": "order2",
-      "exception":" ",
+      "exception": " ",
       "userID": "user2",
-      "image": "number.png"
+      "image": "number.png",
+      "lat&long": 34.22222,
+      "bookingDate": "2019-08-09",
+      "serviceDate": "2019-04-05"
     },
     {
-      "id":"event3",
-      "type":"exit",
-      "ScannedNumber":"1987",
+      "id": "event3",
+      "type": "exit",
+      "ScannedNumber": "1987",
       "locationID": "location3",
       "orderID": "order3",
-      "exception":" ",
+      "exception": " ",
       "userID": "user3",
-      "image": "abc.png"
+      "image": "abc.png",
+      "lat&long": 76.22222,
+      "bookingDate": "2019-08-09",
+      "serviceDate": "2019-04-05"
     },
     {
-      "id":"event1",
-      "type":"Entry",
-      "ScannedNumber":"1877",
+      "id": "event1",
+      "type": "Entry",
+      "ScannedNumber": "1877",
       "locationID": "location4",
       "orderID": null,
-      "exception":"vehicle new entry",
+      "exception": "vehicle new entry",
       "userID": "user4",
-      "image": "car1.png"
+      "image": "car1.png",
+      "lat&long": 22.22222,
+      "bookingDate": "2019-08-09",
+      "serviceDate": "2019-04-05"
+    },
+    {
+      "id": "event5",
+      "type": "exit",
+      "ScannedNumber": "122287",
+      "locationID": "location3",
+      "orderID": "order3",
+      "exception": " ",
+      "userID": "user4",
+      "image": "verna.png",
+      "lat&long": 987.22222,
+      "bookingDate": "2019-01-01",
+      "serviceDate": "2019-03-02"
     }
-  ]
+  ],
+
+  "eventsAdd":
+  {
+    "success": true,
+    "message": "successfully added event"
+  }
 }

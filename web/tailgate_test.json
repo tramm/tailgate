@@ -1,0 +1,47 @@
+{
+    "login":
+    {
+        "success":true,
+        "message":"Logged in successfully",
+        "records":
+        [
+            {
+                "locationName":"rajajinagar",
+                "Initials":false
+            },
+            {
+                "locationName":"jayanagar",
+                "Initials":true
+            }
+        ]
+    },
+
+    "loginfail":
+    {
+        "success":false,
+        "message":"username/password incorrect"
+    },
+
+    "eventsAdd":
+    {
+        "success":true,
+        "message":"Event added Successfully"
+    },
+
+    "checkOrders":
+    {
+      "success": true,
+      "message": "successfully found matched order",
+      "orders":
+      [
+          {
+                "orderID":"order1",
+                "name": "WH/OUT/00001",
+                "origin": "SO022",
+                "scheduled_date": "2019-07-09",
+                "booking_date": "2019-03-02"
+          }
+      ],
+      "exception":""
+    }
+}
