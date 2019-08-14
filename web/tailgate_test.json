@@ -3,48 +3,326 @@
     {
         "success":true,
         "message":"Logged in successfully",
-        "role":"manager",
-        "records":
+        "role":"user",
+        "location":
         [
             {
-                "locationID": "location1",
+                "id": "location1",
                 "locationName":"rajajinagar",
                 "Initials":false
+            }
+        ],
+        "locationType":
+        [
+            {
+                "id": "type1",
+                "type":"serviceCenter"
             },
             {
-                "locationID": "location2",
-                "locationName":"jayanagar",
-                "Initials":true
-            }
+              "id": "type2",
+              "type":"stockyard"
+          }
         ]
     },
-
-    "loginfail":
+    
+    "eventCheck":
+      {
+        "success": true,
+        "message": "successfully found matched order",
+        "name": "anish",
+          "mobile": "1233332322",
+          "bookingDate": "2019-07-08",
+          "serviceDate": "2019-01-09",
+        "orders":
+        [
+            {
+                  "orderID":"order1",
+                  "name": "WH/OUT/00001",
+                  "origin": "SO022",
+                  "scheduled_date": "2019-07-09",
+                  "booking_date": "2019-03-02"
+            }
+        ],
+        "exception":[]
+      },
+  
+    "manager": [
+      {
+        "id": "manager1",
+        "name": "Rahul",
+        "Mobile": "9998989898",
+        "password": "1234",
+        "locations": [
+          {
+            "locationName": "Jayanagar 4th block",
+            "latitude": 23.333222,
+            "longitude": 443.22332
+          },
+          {
+            "locationName": "Jayanagar 6th block",
+            "latitude": 2.333222,
+            "longitude": 243.554333
+          },
+          {
+            "locationName": "inidranagar",
+            "latitude": 32.26354,
+            "longitude": 109.22222
+          }
+        ],
+        "userid": [
+          "user1",
+          "user2",
+          "user3"
+        ]
+      },
+      {
+        "id": "manager2",
+        "name": "ram",
+        "Mobile": "8787778788",
+        "password": "1234",
+        "locations": [
+          {
+            "locationName": "Jayanagar 4th block",
+            "latitude": 23.333222,
+            "longitude": 443.22332
+          },
+          {
+            "locationName": "rajajinagar",
+            "latitude": 21.333222,
+            "longitude": 24.554333
+          }
+        ],
+        "userid": [
+          "user1",
+          "user4",
+          "user2"
+        ]
+      },
+      {
+        "id": "manager3",
+        "name": "suresh",
+        "Mobile": "7666565454",
+        "password": "1234",
+        "locations": [
+          {
+            "locationName": "Jayanagar 4th block",
+            "latitude": 23.333222,
+            "longitude": 443.22332
+          },
+          {
+            "locationName": "dasarahalli",
+            "latitude": 21.333222,
+            "longitude": 24.554333
+          }
+        ],
+        "userid": [
+          "user4",
+          "user5",
+          "user6"
+        ]
+      }
+    ],
+    "users": [
+      {
+        "id": "user1",
+        "name": "mohan",
+        "mobile": "7477377272",
+        "password": "1234"
+      },
+      {
+        "id": "user2",
+        "name": "prashant",
+        "mobile": "3422343234",
+        "password": "1234"
+      },
+      {
+        "id": "user3",
+        "name": "chalikeni",
+        "mobile": "2122222222",
+        "password": "1234"
+      },
+      {
+        "id": "user4",
+        "name": "divya",
+        "mobile": "9877654543",
+        "password": "1234"
+      }
+    ],
+    "orders": [
+      {
+        "id": "order1",
+        "name": "WH/OUT/00001",
+        "origin": "SO022",
+        "scheduled_date": "2019-07-09",
+        "booking_date": "2019-03-02"
+      },
+      {
+        "id": "order2",
+        "name": "WH/IN/00001",
+        "origin": "PO00001",
+        "scheduled_date": "2019-02-09",
+        "booking_date": "2019-01-02"
+      },
+      {
+        "id": "order3",
+        "name": "WH/IN/00004",
+        "origin": "SO032",
+        "scheduled_date": "2019-02-21",
+        "booking_date": "2019-03-12"
+      },
+      {
+        "id": "order4",
+        "name": "WH/IN/00005",
+        "origin": "SO072",
+        "scheduled_date": "2019-07-14",
+        "booking_date": "2019-01-21"
+      }
+    ],
+    "location": [
+      {
+        "id": "location1",
+        "lat&long": 22.22222,
+        "name": "jayanagar",
+        "userID": [
+          "user1",
+          "user2",
+          "user3"
+        ],
+        "managerID": [
+          "manager1"
+        ],
+        "type": "service center"
+      },
+      {
+        "id": "location2",
+        "lat&long": 34.22222,
+        "name": "indiranagar",
+        "userID": [
+          "user1"
+        ],
+        "managerID": [
+          "manager1",
+          "manager2"
+        ],
+        "type": "stock warehouse"
+      },
+      {
+        "id": "location3",
+        "lat&long": 76.22222,
+        "name": "rajajinagar",
+        "userID": [
+          "user2",
+          "user3"
+        ],
+        "managerID": [
+          "manager3",
+          "manager4"
+        ],
+        "type": "showroom"
+      },
+      {
+        "id": "location4",
+        "lat&long": "",
+        "name": "jayanagar 4th block",
+        "userID": [
+          "user4"
+        ],
+        "managerID": [
+          "manager1"
+        ],
+        "type": "service center"
+      }
+    ],
+    
+    "locationAdd":
     {
-        "success":false,
-        "message":"username/password incorrect"
+      "success":true,
+      "message":"successfully added location"
     },
-
+    
+    "exceptions": [
+      "vehicle new entry",
+      "No matching order present",
+      "order not created",
+      "emergency",
+      "emergency exit",
+      "special exit"
+    ],
+    "event_type": [
+      "Entry",
+      "Exit"
+    ],
+    "events": [
+      {
+        "id": "event1",
+        "type": "Entry",
+        "ScannedNumber": "122232",
+        "locationID": "location1",
+        "orderID": "order1",
+        "exception": " ",
+        "userID": "user1",
+        "image": "car1.png",
+        "lat&long": 34.22222,
+        "bookingDate": "2019-08-09",
+        "serviceDate": "2019-04-05"
+      },
+      {
+        "id": "event2",
+        "type": "Entry",
+        "ScannedNumber": "13232",
+        "locationID": "location2",
+        "orderID": "order2",
+        "exception": " ",
+        "userID": "user2",
+        "image": "number.png",
+        "lat&long": 34.22222,
+        "bookingDate": "2019-08-09",
+        "serviceDate": "2019-04-05"
+      },
+      {
+        "id": "event3",
+        "type": "exit",
+        "ScannedNumber": "1987",
+        "locationID": "location3",
+        "orderID": "order3",
+        "exception": " ",
+        "userID": "user3",
+        "image": "abc.png",
+        "lat&long": 76.22222,
+        "bookingDate": "2019-08-09",
+        "serviceDate": "2019-04-05"
+      },
+      {
+        "id": "event1",
+        "type": "Entry",
+        "ScannedNumber": "1877",
+        "locationID": "location4",
+        "orderID": null,
+        "exception": "vehicle new entry",
+        "userID": "user4",
+        "image": "car1.png",
+        "lat&long": 22.22222,
+        "bookingDate": "2019-08-09",
+        "serviceDate": "2019-04-05"
+      },
+      {
+        "id": "event5",
+        "type": "exit",
+        "ScannedNumber": "122287",
+        "locationID": "location3",
+        "orderID": "order3",
+        "exception": " ",
+        "userID": "user4",
+        "image": "verna.png",
+        "lat&long": 987.22222,
+        "bookingDate": "2019-01-01",
+        "serviceDate": "2019-03-02"
+      }
+    ],
+  
     "eventsAdd":
     {
-        "success":true,
-        "message":"Event added Successfully"
-    },
-
-    "checkOrders":
-    {
       "success": true,
-      "message": "successfully found matched order",
-      "orders":
-      [
-          {
-                "orderID":"order1",
-                "name": "WH/OUT/00001",
-                "origin": "SO022",
-                "scheduled_date": "2019-07-09",
-                "booking_date": "2019-03-02"
-          }
-      ],
-      "exception":""
+      "message": "successfully added event"
     }
-}
+  }
