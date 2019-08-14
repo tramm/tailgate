@@ -3,13 +3,16 @@
     {
         "success":true,
         "message":"Logged in successfully",
+        "role":"manager",
         "records":
         [
             {
+                "locationID": "location1",
                 "locationName":"rajajinagar",
                 "Initials":false
             },
             {
+                "locationID": "location2",
                 "locationName":"jayanagar",
                 "Initials":true
             }

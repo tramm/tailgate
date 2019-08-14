@@ -1,4 +1,51 @@
 {
+  "login":
+  {
+      "success":true,
+      "message":"Logged in successfully",
+      "role":"user",
+      "location":
+      [
+          {
+              "id": "location1",
+              "locationName":"rajajinagar",
+              "Initials":false
+          }
+      ],
+      "locationType":
+      [
+          {
+              "id": "type1",
+              "type":"serviceCenter"
+          },
+          {
+            "id": "type2",
+            "type":"stockyard"
+        }
+      ]
+  },
+  
+  "eventCheck":
+    {
+      "success": true,
+      "message": "successfully found matched order",
+      "name": "anish",
+	    "mobile": "1233332322",
+	    "bookingDate": "2019-07-08",
+	    "serviceDate": "2019-01-09",
+      "orders":
+      [
+          {
+                "orderID":"order1",
+                "name": "WH/OUT/00001",
+                "origin": "SO022",
+                "scheduled_date": "2019-07-09",
+                "booking_date": "2019-03-02"
+          }
+      ],
+      "exception":[]
+    },
+
   "manager": [
     {
       "id": "manager1",

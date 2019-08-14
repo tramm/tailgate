@@ -46,7 +46,7 @@ class EventClass {
             .sort({ createdAt: -1 });
         return { events };
     }
-    static async add({ type,scannedNumber,locationID,orderID,exception,userID,image,latlong,bookingDate,serviceDate }) {
+    static async add({ type,scannedNumber,locationID,orderID,userID,image,latlong,bookingDate,serviceDate }) {
         console.log(orderID);
         if (orderID != "" && orderID != null) {
             const newEvent = await this.create({
