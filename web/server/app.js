@@ -4,6 +4,7 @@ const mongoSessionStore = require('connect-mongo');
 const mongoose = require('mongoose');
 const auth_pass = require('./passport');
 const api = require('./api');
+const AWS = require('aws-sdk');
 
 require('dotenv').config();
 
@@ -41,6 +42,11 @@ const sess = {
     maxAge: 14 * 24 * 60 * 60 * 1000,
   },
 };
+//configuring the AWS environment
+AWS.config.update({
+  accessKeyId: process.env.Amazon_accessKeyId,
+  secretAccessKey: process.env.Amazon_secretAccessKey
+});
 
 server.use(session(sess));
 auth_pass({ server });

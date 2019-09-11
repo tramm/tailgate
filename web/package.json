@@ -30,7 +30,8 @@
     "ejs": "^2.6.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
-    "jayson": "^3.0.1"
+    "jayson": "^3.0.1",
+    "aws-sdk": "2.505.0"
   },
   "devDependencies": {
     "babel-eslint": "10.0.1",
@@ -43,6 +44,7 @@
     "eslint-plugin-react": "7.11.1",
     "nodemon": "1.18.4",
     "prettier": "1.15.3",
-    "json-server": "0.15.0"
+    "json-server": "0.15.0",
+    "@google/maps": "0.5.5"
   }
 }
