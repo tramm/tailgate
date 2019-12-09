@@ -45,20 +45,37 @@ class Base {
             let domain = [];
             domain.push(["manager_user_ids", "in", [server.uid]]);
             result = await server.search_read(model, { domain: domain, fields: ["name", "id", "team_type"] });
-            if (result.length !=0) {
+            if (result.length != 0) {
                 return { role: "Manager", teams: result }
             } else {
-                domain = [["user_id", "=",server.uid]];
+                domain = [["user_id", "=", server.uid]];
                 result = await server.search_read(model, { domain: domain, fields: ["name", "id", "team_type"] });
                 if (result.length != 0) {
                     return { role: "Team_Lead", teams: result }
                 }
             }
             console.log("The model and result is ", model + '', result);
-            return { role: "user",teams:{records:[]}};
+            return { role: "user", teams: { records: [] } };
         } catch (err) {
             return { error: err.message || err.toString() };
         }
     }
+
+    async listLocations(user) {
+        let locations = null;
+        let model = 'stock.location';
+        let domain = [];
+        domain.push(["active", "=", true]);
+        let server = odoo.getOdoo(user.email);
+        locations = await server.search_read(model, { domain: domain, fields: ["name", "complete_name", "location_id"] });
+        console.log("The locations are ", locations);
+        if (locations.records != undefined) {
+            locations.records = this.cleanModels(locations.records);
+            return locations;
+        } else {
+            return locations;
+        }
+    }
+
 }
 module.exports = new Base();
