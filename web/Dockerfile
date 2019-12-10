@@ -6,5 +6,5 @@ RUN npm run build
 
 # RUN apk del dev-dependencies
  
-EXPOSE 8000
+EXPOSE 8003
 CMD ["npm", "start"]
