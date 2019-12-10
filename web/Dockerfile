@@ -1,4 +1,4 @@
-FROM tramm/node_react_master:latest
+FROM mhart/alpine-node:12.4
 MAINTAINER tramm
 
 COPY . /var/www/app
