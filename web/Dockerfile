@@ -5,5 +5,5 @@ COPY . /var/www/app
 
 # RUN apk del dev-dependencies
  
-EXPOSE 8003
+EXPOSE 8003 
 CMD ["npm", "start"]
