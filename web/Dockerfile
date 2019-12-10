@@ -1,9 +1,9 @@
-FROM mhart/alpine-node:12.4
+FROM tramm/tgate_node_master
 MAINTAINER tramm
 
 COPY . /var/www/app
 
 # RUN apk del dev-dependencies
-RUN npm install 
-EXPOSE 8003 
+ 
+EXPOSE 8000
 CMD ["npm", "start"]
