@@ -41,7 +41,7 @@ router.get('/listEvents', async (req, res, next) => {
 router.post('/createEvents', async (req, res, next) => {
   try {
     const createdEvent = await Event.add(req.user, req.body);
-    res.json(createdEvent);
+    res.json({ "message": "success" });
   } catch (err) {
     next(err);
   }

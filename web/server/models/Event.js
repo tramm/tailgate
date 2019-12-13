@@ -51,8 +51,7 @@ const eventSchema = new Schema({
     },
     vehicles: [vehicleSchema],
     eventMaster: {
-        type: Schema.ObjectId,
-        ref: 'EventMaster'
+        type: String,
     },
     displayName: String,
 });
