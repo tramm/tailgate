@@ -28,7 +28,8 @@ router.get('/inventory/stock', async (req, res, next) => {
 });
 router.get('/s3', async (req, res, next) => {
   try {
-    let result = await store("../../dms/web/static/Saboo-02.png");
+    console.log("Hello from s3 ---CALL");
+    let result = await store("./static/Saboo-02.png");
     console.log(result);
     res.json({ result });
   } catch (err) {
