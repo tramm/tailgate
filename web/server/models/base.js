@@ -105,5 +105,21 @@ class Base {
         });
         return modules;
     };
+
+    async listLocations(user) {
+        let locations = null;
+        let model = 'stock.location';
+        let domain = [];
+        domain.push(["active", "=", true]);
+        let server = odoo.getOdoo(user.email);
+        locations = await server.search_read(model, { domain: domain, fields: ["name", "complete_name", "location_id"] });
+        console.log("The locations are ", locations);
+        if (locations.records != undefined) {
+            locations.records = this.cleanModels(locations.records);
+            return locations;
+        } else {
+            return locations;
+        }
+    }
 }
 module.exports = new Base();
