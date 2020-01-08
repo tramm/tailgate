@@ -13,52 +13,104 @@ class Odoo_Server {
         this.init();
     };
     init() {
-        console.log("Hello from server init");
-        const odoo = new Odoo({
-            host: this.host,
-            port: this.port,
-            database: this.database,
-            username: this.admin_user,
-            password: this.admin_password
-        });
-        let self = this;
-        odoo.connect(function (err, result) {
-            if (err) {
-                console.log("Error in connecting to Odoo");
-            }
-            self.initDatabase(odoo);
-            console.log("Result:", odoo);
-        });
-        this.connections['admin'] = odoo;
+        try {
+            console.log("Hello from server init");
+            const odoo = new Odoo({
+                host: this.host,
+                port: this.port,
+                database: this.database,
+                username: this.admin_user,
+                password: this.admin_password
+            });
+            let self = this;
+            odoo.connect(function (err, result) {
+                if (err) {
+                    console.log("Error in connecting to Odoo");
+                }
+                self.initDatabase(odoo);
+                console.log("Result:", odoo);
+            });
+            this.connections[this.admin_user] = odoo;
+        } catch (err) {
+            console.log("Error", err);
+        }
     }
-    async initDatabase(server) {
-        console.log("Database Check ...Hang on");
-        //create admin user in db if not exists
-        let result = await server.search_read("res.users", { domain: [], fields: ["login", "phone", "mobile", "partner_id"] });
+    async createUsers(server) {
+        let result = await server.search_read("res.users", { domain: [], fields: ["login", "phone", "mobile", "partner_id", "create_date"] });
         let userList = result.records;
-        this.users = {};
-        let self = this;
-        userList.forEach(async function (user) {
+        let modifiedUserCountArray = [];
+        let newUserArray = [];
+        let updatedUserArray = [];
+        for (const user of userList) {
             try {
-                //   console.log("The user in loop : ", user);
-                let mobile = user.phone;
+                let mobile = user.phone != false ? user.phone.trim() : null;
                 let name = user.partner_id[1];
                 let partner_id = user.partner_id[0];
-                if (user.login === "admin") {
+                let email = user.login;
+                if (email === this.admin_user) {
                     mobile = '1111111111';
                 }
                 let localUser = await User.findOne({ mobile: mobile });
-                if (localUser === null && mobile != null && mobile !=false) {
-                    let new_user = await User.add({ name: name, partner_id: partner_id, email: user.login, mobile: mobile, pin: "1234" });
-                    self.users[mobile] = new_user;
+                if (localUser === null && mobile != null && mobile != false) {
+                    console.log("This is new user and not found in mongoDB ", user);
+                    let newUser = { name: name, partner_id: partner_id, email: email, mobile: mobile }
+                    if (email == this.admin_user) {
+                        console.log("Admin user is added");
+                        newUser.isAdmin = true;
+                    }
+                    let newUsers = await User.add(newUser);
+                    newUserArray.push(newUsers);
+                    console.log("The new_user are ", newUserArray);
+                } else if (localUser !== null) {
+                    if (localUser.name !== name || localUser.email !== email || localUser.partner_id !== partner_id) {
+                        console.log("The mongoDB user that should be updated is ", localUser.mobile);
+                        let dupUsers = null;
+                        let mostRecentDate = [];
+                        let mostRecentUser = [];
+                        console.log("get the duplicate users of passed mobile number from odoo db result");
+                        /* let domain = [];
+                        domain.push(["phone", "=", mobile]);
+                        dupUsers = await server.search_read("res.users", { domain: domain, fields: ["login", "phone", "mobile", "partner_id", "create_date"] });
+                        console.log("The dupUsers areeeeeeeeeeeeeeeeeeeeeee",dupUsers); */
+                        dupUsers = userList.filter(user => user.phone === mobile);
+                        console.log("The dupUsers are", dupUsers, dupUsers.length);
+                        if (dupUsers !== null && dupUsers.length > 0) {
+                            console.log("find the latest user from odoo for updating mongoDB existing user");
+                            mostRecentDate = new Date(Math.max.apply(null, dupUsers.map(function (e) {
+                                return new Date(e.create_date);
+                            })));
+                            mostRecentUser = dupUsers.filter(e => {
+                                var d = new Date(e.create_date);
+                                return d.getTime() == mostRecentDate.getTime();
+                            })[0];
+                        }
+                        console.log("get the latest user details and update the mongo user based on id");
+                        let updateDetails = { name: mostRecentUser.partner_id[1], partner_id: mostRecentUser.partner_id[0], email: mostRecentUser.login };
+                        let updatedUser = await User.updateUser(localUser._id, updateDetails);
+                        console.log("The final updated user in mongoDB is ", updatedUser);
+                        updatedUserArray.push(updatedUser);
+                    }
                 }
-               
             } catch (error) {
                 console.log(error);
             }
-        });
+        }
+        modifiedUserCountArray.push(newUserArray.length);
+        modifiedUserCountArray.push(updatedUserArray.length);
+        return modifiedUserCountArray;
+    }
+    async initDatabase(server) {
+        console.log("Database Check ...Hang on");
+        let newUsers = await this.createUsers(server);
+        console.log("New Users Added - ", newUsers);
         console.log("Successfully Initiated the User Database");
     }
+
+    async refreshUsers(server) {
+        let newUsers = await this.createUsers(server);
+        return newUsers;
+    }
+
     getOdoo(user, password) {
         if (this.connections[user] === undefined) {
             console.log("Creating New Odoo Session");

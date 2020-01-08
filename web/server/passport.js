@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 const sms = require('./ext/sms');
 const OTP = require('./ext/otp');
 const odoo = require('./odoo_server');
+//const firebase = require('./ext/firebase');
 const base = require('./models/base');
 
 const BCRYPT_SALT_ROUNDS = 12;
@@ -41,7 +42,7 @@ function auth_pass({ server }) {
             }
             console.log("Trying to create Odoo Session");
             oserver = odoo.getOdoo(user.email, password);
-            console.log(oserver);
+            console.log("The oserver is ",oserver);
             if (oserver.sid) {
               console.log("trying to logout");
               oserver.logout();
@@ -55,9 +56,15 @@ function auth_pass({ server }) {
               let im_result = await oserver.search_read(model, { domain: [["id", "=", user.partner_id]], fields: ["id", "image"] });
               user.image = im_result.records[0].image;
               role_result = await base.getUserRole(user);
+              company_result = await base.getUserCompanies(user);
               console.log("User role result", role_result);
+              console.log("User company result in passport js", company_result);
               user.role = role_result.role;
               user.teams = role_result.teams;
+              user.module = role_result.module;
+              user.company_id = company_result.company_id;
+              user.company_ids = company_result.company_ids;
+              user.uid = oserver.uid;
               return done(null, user);
             });
           });
@@ -134,23 +141,33 @@ function auth_pass({ server }) {
     (req, res, next) => {
       let user = req.user;
       const token = jwt.sign({ id: req.user.id }, jwtSecret.secret);
-        if (user.image == false) {
-          console.log("No User Avatar Found !!!!");
-          user.image = "";
-        }
-        res.status(200).send({
-          name: user.name,
-          email: user.email,
-          image: user.image,
-          auth: true,
-          role: user.role,
-          teams: user.teams,
-          token,
-          message: 'user found & logged in',
-        });
-        console.log("Successful Login");
+      if (user.image == false) {
+        console.log("No User Avatar Found !!!!");
+        user.image = "";
+      }
+      /* firebase(user,{
+        title: 'Welcome to DMS',
+        message: 'Thanks for Logging In !!!!',
+        timestamp: '2019-05-27 8:15:01'
+    }); */
+      res.status(200).send({
+        name: user.name,
+        email: user.email,
+        userId: user.uid,
+        image: user.image,
+        auth: true,
+        role: user.role,
+        module: user.module,
+        isAdmin: user.isAdmin,
+        teams: user.teams,
+        company_id: user.company_id,
+        company_ids: user.company_ids,
+        token,
+        message: 'user found & logged in',
+      });
+      console.log("Successful Login");
     });
- 
+
   server.get('/logout', (req, res) => {
     req.logout();
     res.redirect('/login');
