@@ -112,7 +112,7 @@ class Base {
         let domain = [];
         domain.push(["active", "=", true]);
         let server = odoo.getOdoo(user.email);
-        locations = await server.search_read(model, { domain: domain, fields: ["name", "complete_name", "location_id"] });
+        locations = await server.search_read(model, { domain: domain, fields: ["name", "id"] });
         console.log("The locations are ", locations);
         if (locations.records != undefined) {
             locations.records = this.cleanModels(locations.records);
