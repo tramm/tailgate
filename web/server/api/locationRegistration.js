@@ -43,7 +43,7 @@ router.post('/updateLocationRegistrations', async (req, res, next) => {
     try {
         console.log("Inside update location reg api");
         const LocationRegs = await LocationRegistration.update({locationId: req.query.locationId}, req.body);
-        res.json(LocationRegs);
+        res.json({ "message": "updated successful" });
     } catch (err) {
         next(err);
     }
@@ -53,7 +53,7 @@ router.post('/createLocationRegistration', async (req, res, next) => {
     try {
         console.log("Inside create Location reg api");
         const createdLocation = await LocationRegistration.add(req.body);
-        res.json({ "message": "success" });
+        res.json({ "message": "created successful" });
     } catch (err) {
         next(err);
     }
