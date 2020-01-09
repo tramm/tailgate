@@ -42,7 +42,8 @@ router.get('/listLocationRegistrations', async (req, res, next) => {
 router.get('/listSecurityLocations', async (req, res, next) => {
     try {
         console.log("Inside listSecurityLocations reg api");
-        const LocationRegs = await LocationRegistration.listBySecurity({ "userId": req.query.userId });
+        let userId = req.user._id;
+        const LocationRegs = await LocationRegistration.listBySecurity(userId);
         res.json(LocationRegs);
     } catch (err) {
         next(err);

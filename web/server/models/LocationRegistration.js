@@ -37,7 +37,7 @@ class LocationRegistrationClass {
         return locationRegistrations;
     }
 
-    static async listBySecurity({ userId }) {
+    static async listBySecurity(userId) {
         const securityUsers = await this.find({ "security": userId })
             .sort({ createdAt: -1 })
             .select(['location_name', 'location_id']);
