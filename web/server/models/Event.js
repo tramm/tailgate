@@ -25,8 +25,9 @@ const eventSchema = new Schema({
         type: Boolean,
         default: true
     },
-    location_id: {
-        type: Number,
+    locationRegistration: {
+        type: Schema.ObjectId,
+        ref: 'LocationRegistration',
     },
     latitude: {
         type: Number,
@@ -57,20 +58,28 @@ const eventSchema = new Schema({
 });
 
 class EventClass {
-    static async list(user) {
+    static async list() {
         const events = await this.find({})
             .sort({ createdAt: -1 });
         return { events };
     }
 
-    static async add(user, { eventMaster, event_type, multiple, location_id, latitude, longitude, name, mobile, invoice_image, vehicle_image, vehicles }) {
+    static async listEventsBasedOnLocation({ locationId }) {
+        const populateLocationReg = [{ path: "locationRegistration", select: ['location_name', 'location_id'] }];
+        const events = await this.find({ "locationRegistration": locationId })
+            .sort({ createdAt: -1 })
+            .populate(populateLocationReg);
+        return { events };
+    }
+
+    static async add({ eventMaster, event_type, multiple, locationRegistration, latitude, longitude, name, mobile, invoice_image, vehicle_image, vehicles }) {
         console.log("adding new events");
         const newEvent = await this.create({
             createdAt: new Date(),
             eventMaster,
             event_type,
             multiple,
-            location_id,
+            locationRegistration,
             latitude,
             longitude,
             name,

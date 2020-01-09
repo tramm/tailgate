@@ -7,6 +7,9 @@ const locationRegSchema = new Schema({
         type: Date,
         required: true,
     },
+    location_name: {
+        type: String,
+    },
     location_id: {
         type: Number,
     },
@@ -46,9 +49,10 @@ class LocationRegistrationClass {
         return updLocationRegistration;
     }
 
-    static async add({ location_id, latitude, longitude, security }) {
+    static async add({ location_name, location_id, latitude, longitude, security }) {
         const newLocationReg = await this.create({
             createdAt: new Date(),
+            location_name,
             location_id,
             latitude,
             longitude,
