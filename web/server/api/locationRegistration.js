@@ -39,10 +39,20 @@ router.get('/listLocationRegistrations', async (req, res, next) => {
     }
 });
 
+router.get('/listSecurityLocations', async (req, res, next) => {
+    try {
+        console.log("Inside listSecurityLocations reg api");
+        const LocationRegs = await LocationRegistration.listBySecurity({ "userId": req.query.userId });
+        res.json(LocationRegs);
+    } catch (err) {
+        next(err);
+    }
+});
+
 router.post('/updateLocationRegistrations', async (req, res, next) => {
     try {
         console.log("Inside update location reg api");
-        const LocationRegs = await LocationRegistration.update({locationId: req.query.locationId}, req.body);
+        const LocationRegs = await LocationRegistration.update({ locationId: req.query.locationId }, req.body);
         res.json({ "message": "updated successful" });
     } catch (err) {
         next(err);

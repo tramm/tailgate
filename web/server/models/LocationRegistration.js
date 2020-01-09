@@ -37,10 +37,11 @@ class LocationRegistrationClass {
         return locationRegistrations;
     }
 
-    static async listBySecurity() {
-        const adminUsers = await this.find({ "security": true })
-            .sort({ createdAt: -1 });
-        return adminUsers;
+    static async listBySecurity({ userId }) {
+        const securityUsers = await this.find({ "security": userId })
+            .sort({ createdAt: -1 })
+            .select(['location_name', 'location_id']);
+        return securityUsers;
     }
 
     static async update({ locationId }, req) {

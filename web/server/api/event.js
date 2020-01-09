@@ -31,6 +31,7 @@ router.use((req, res, next) => {
 
 router.get('/listEvents', async (req, res, next) => {
   try {
+    console.log("Inside listEvents events api");
     const events = await Event.list();
     res.json(events);
   } catch (err) {
@@ -40,6 +41,7 @@ router.get('/listEvents', async (req, res, next) => {
 
 router.get('/eventsBasedOnLocation', async (req, res, next) => {
   try {
+    console.log("Inside eventsBasedOnLocation events api");
     const events = await Event.listEventsBasedOnLocation({ "locationId": req.query.locationId });
     res.json(events);
   } catch (err) {
@@ -49,6 +51,7 @@ router.get('/eventsBasedOnLocation', async (req, res, next) => {
 
 router.post('/createEvents', async (req, res, next) => {
   try {
+    console.log("Inside createEvents api");
     const createdEvent = await Event.add(req.body);
     res.json({ "message": "success" });
   } catch (err) {
