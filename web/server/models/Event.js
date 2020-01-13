@@ -65,11 +65,25 @@ class EventClass {
     }
 
     static async listEventsBasedOnLocation({ locationId }) {
+        console.log("Inside listEventsBasedOnLocation method");
         const populateLocationReg = [{ path: "locationRegistration", select: ['location_name', 'location_id'] }];
         const events = await this.find({ "locationRegistration": locationId })
             .sort({ createdAt: -1 })
             .populate(populateLocationReg);
         return { events };
+    }
+
+    static async update({ eventId }, req) {
+        console.log("Updating the event");
+        const updEvent = await this.findByIdAndUpdate(eventId, { $set: req }, { new: true });
+        return updEvent;
+    }
+
+    static async delete({ eventId }) {
+        console.log("deleting the event");
+        const delEvent = await Event.findByIdAndRemove(eventId);
+        console.log("the deleted event id is ", delEvent._id);
+        return delEvent;
     }
 
     static async add({ eventMaster, event_type, multiple, locationRegistration, latitude, longitude, name, mobile, invoice_image, vehicle_image, vehicles }) {

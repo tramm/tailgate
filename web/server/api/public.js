@@ -3,7 +3,7 @@ const _ = require('lodash');
 const logger = require('../logs');
 const router = express.Router();
 const inventory = require('../models/inventory');
-const store = require('../ext/s3.js');
+const store = require('../ext/s3');
 
 
 router.use((req, res, next) => {
@@ -29,7 +29,7 @@ router.get('/inventory/stock', async (req, res, next) => {
 router.get('/s3', async (req, res, next) => {
   try {
     console.log("Hello from s3 ---CALL");
-    let result = await store("./static/Saboo-02.png");
+    let result = await store.s3("./static/Saboo-02.png");
     console.log(result);
     res.json({ result });
   } catch (err) {

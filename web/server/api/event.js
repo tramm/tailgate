@@ -1,11 +1,13 @@
 const express = require('express');
 const _ = require('lodash');
+require('dotenv').config();
 
 const Event = require('../models/Event');
 const base = require('../models/base');
 const logger = require('../logs');
 const router = express.Router();
 const passport = require('passport');
+const store = require('../ext/s3');
 
 router.use((req, res, next) => {
   console.log("service api authentication ");
@@ -50,11 +52,25 @@ router.get('/eventsBasedOnLocation', async (req, res, next) => {
 });
 
 router.post('/createEvents', async (req, res, next) => {
+  let createdEvent = null;
   try {
     console.log("Inside createEvents api");
-    const createdEvent = await Event.add(req.body);
-    res.json({ "message": "success" });
+    createdEvent = await Event.add(req.body);
+    const vehicleImgPath = await store.s3Base64(createdEvent.vehicle_image, createdEvent.name + '_vehicle_image');
+    console.log("The vehicle image path is ", vehicleImgPath);
+    const invoiceImgPath = await store.s3Base64(createdEvent.invoice_image, createdEvent.name + '_invoice_image');
+    console.log("The invoice image path is ", invoiceImgPath);
+    const vehiclePath = vehicleImgPath.split('folder/');
+    console.log("The vehicle path is ", vehiclePath);
+    const invoicePath = invoiceImgPath.split('folder/');
+    console.log("The invoice path is ", invoicePath);
+    const updateEvent = await Event.update({ 'eventId': createdEvent._id }, { 'invoice_image': invoicePath[1], 'vehicle_image': vehiclePath[1] });
+    res.json({ "message": "created successful" });
   } catch (err) {
+    if (createdEvent != null && createdEvent._id != undefined) {
+      console.log("error in uploading image to s3 and deeting created event");
+      const deletedEvent = await Event.delete({ 'eventId': createdEvent._id });
+    }
     next(err);
   }
 });
