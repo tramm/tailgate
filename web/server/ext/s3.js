@@ -52,7 +52,7 @@ class S3Class {
     // This won't be needed if they're uploading their avatar, hence the filename, userAvatar.js.
     const params = {
       Bucket: 'tailgate.images',
-      Key: "folder/" + Date.now() + "_" + imageName + ".png",
+      Key: "folder/" + Date.now() + "_" + imageName + ".jpg",
       Body: base64Data,
       //ACL: 'public-read',
       ContentEncoding: 'base64', // required
