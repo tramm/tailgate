@@ -63,8 +63,8 @@ router.post('/updateLocationRegistrations', async (req, res, next) => {
 router.post('/createLocationRegistration', async (req, res, next) => {
     try {
         console.log("Inside create Location reg api");
-        const createdLocation = await LocationRegistration.add(req.body);
-        res.json({ "message": "created successful" });
+        const createdLocationResult = await LocationRegistration.add(req.body);
+        res.json({ "message": createdLocationResult });
     } catch (err) {
         next(err);
     }

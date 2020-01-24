@@ -45,22 +45,35 @@ class LocationRegistrationClass {
     }
 
     static async update({ locationId }, req) {
+        let uniqueSecurityArray = [];
+        if (req.security != undefined) {
+            uniqueSecurityArray = [...new Set(req.security)];
+        }
+        req.security = uniqueSecurityArray;
         const updLocationRegistration = await this.findByIdAndUpdate(locationId, { $set: req }, { new: true });
         console.log(updLocationRegistration);
         return updLocationRegistration;
     }
 
     static async add({ location_name, location_id, latitude, longitude, security }) {
-        const newLocationReg = await this.create({
-            createdAt: new Date(),
-            location_name,
-            location_id,
-            latitude,
-            longitude,
-            security
-        });
-        return newLocationReg;
-    };
+        if (location_id) {
+            const locations = await this.findOne({ location_id });
+            if (locations) return "location already registered";
+            const newLocationReg = await this.create({
+                createdAt: new Date(),
+                location_name,
+                location_id,
+                latitude,
+                longitude,
+                security
+            });
+            return "created successful";
+        }
+        else {
+            console.log("ERROR in request - location id required");
+            throw new Error('Location id required');
+        }
+    }
 }
 locationRegSchema.loadClass(LocationRegistrationClass);
 const LocationRegistration = mongoose.model('LocationRegistration', locationRegSchema);
